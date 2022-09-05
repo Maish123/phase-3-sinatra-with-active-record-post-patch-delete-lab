@@ -1,5 +1,6 @@
 class ApplicationController < Sinatra::Base
   set default_content_type: "application/json"
+
   
   get '/bakeries' do
     bakeries = Bakery.all
@@ -21,6 +22,29 @@ class ApplicationController < Sinatra::Base
     # see the BakedGood class for the  method definition of `.by_price`
     baked_good = BakedGood.by_price.first
     baked_good.to_json
+  end
+  ## POST /Baked goods
+  post '/baked_goods' do
+    new_good = BakedGood.create(
+      name: params[:name],
+      price: params[:price],
+      bakery_id: params[:bakery_id]
+    )
+    new_good.to_json
+  end
+
+  patch '/bakeries/:id' do
+    name = Bakery.find(params[:id])
+    name.update(
+      name: params[:name]
+    )
+    name.to_json
+  end
+
+  delete '/baked_goods/:id' do
+    good = BakedGood.find(params[:id])
+    good.destroy
+    good.to_json
   end
 
 end
